@@ -1,34 +1,104 @@
-# Contributing to ProteinTracker PWA
+# ProteinTracker PWA
 
-Thank you for your interest in contributing! 🙌
+Welcome to **ProteinTracker PWA**! 🥤
 
-This guide explains the easiest way to contribute to this project, whether it's fixing a bug, adding a feature, or improving documentation.
-
----
-
-## 1. Opening an Issue (Optional but Recommended)
-
-Before you start coding:
-1. Check the existing issues to see if someone else is already working on it.
-2. If not, create a new issue describing:
-   - What the problem or feature is
-   - Steps to reproduce (if it’s a bug)
-   - Any screenshots or examples that help explain
-
-> This helps maintainers and other contributors coordinate effectively.
+This is a simple Progressive Web App to track your daily protein drink intake.  
+This project is **open-source** and primarily for **educational purposes**, so small features, bug fixes, and improvements are all welcome.
 
 ---
 
-## 2. Fork the Repository
+## Contributing Guide
+
+We encourage contributions from everyone. This guide explains step-by-step how to contribute via **pull requests (PRs)**.
+
+### 1. Fork the Repository
 
 Click the **Fork** button at the top-right of the GitHub page.  
-This creates a copy of the repo under your account.
+This creates a copy of the repository under your own GitHub account where you have write access.
 
 ---
 
-## 3. Create a Branch
+### 2. Create a Branch
 
-From your fork, create a new branch for your changes:
+Create a new branch for your changes instead of working on `main` directly:
 
 ```bash
 git checkout -b feature/my-feature
+```
+Use a descriptive branch name like fix/button-color or feature/dark-mode.
+
+### 3. Make Your Changes
+* Add features, fix bugs, or improve documentation.
+
+* Keep your code clean, readable, and self-contained.
+
+* Commit your changes with a descriptive message:
+
+```bash
+git add .
+git commit -m "Add dark mode toggle"
+```
+
+### 4. Push Your Branch to Your Fork
+
+Push the branch with your changes to your fork:
+```bash
+git push origin feature/my-feature
+```
+
+### 5. Open a Pull Request (PR)
+
+1. Go to your fork on GitHub.
+
+2. Click Compare & pull request.
+
+3. Make sure the base repository is softwarewithnick/ProteinTracker and the base branch is main.
+
+4. Give your PR a descriptive title and provide a clear description:
+
+   * What changes you made
+
+   * Why these changes are useful
+
+   * Reference any related issue (e.g., Closes #5) if applicable
+
+   * Submit the PR.
+
+5. Small contributions are absolutely welcome! Even tiny fixes or minor UI improvements help the project.
+
+### 6. PR Review
+
+* Maintainers will review your PR.
+
+* They may request changes or provide feedback — this is normal.
+
+* Push updates to the same branch; your PR will automatically update.
+
+* Once approved, your PR will be merged into main.
+
+### 7. Stay in Sync
+
+If other changes are merged while your PR is open, keep your fork up-to-date:
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main
+```
+Replace upstream with the remote pointing to the original repository.
+
+### 8. Optional: Opening Issues First
+
+For larger changes or new features, it’s helpful to open an issue first:
+
+1. Describe the problem or feature idea.
+2. Wait for discussion or approval before starting work.
+3. Reference the issue in your PR (e.g., `Closes #10`).
+
+> This keeps the project organized and prevents duplicate effort.
+
+## Notes
+
+- This project is **educational**, so experimentation is encouraged.
+- Every contribution counts — from small bug fixes to new features.
+- Make sure to write clear commit messages.
+- Thank you for helping make ProteinTracker better! 🎉
