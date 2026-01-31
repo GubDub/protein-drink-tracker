@@ -82,9 +82,14 @@
 
   function saveState(dateKey, drank, history) {
     try {
+<<<<<<<<< Temporary merge branch 1
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ dateKey, drank }));
+    } catch (_) { }
+=========
       const trimmed = (history || []).slice(-HISTORY_MAX_DAYS);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ dateKey, drank, history: trimmed }));
     } catch (_) {}
+>>>>>>>>> Temporary merge branch 2
   }
 
   function getCurrentDrank() {
@@ -154,10 +159,10 @@
     const btn = document.getElementById('toggle-btn');
     const status = document.getElementById('status-text');
     const title = document.getElementById('app-title');
-
-    const texts = translations[currentLang];
     const dateEl = document.getElementById('date-text');
     const streakEl = document.getElementById('streak-text');
+
+    const texts = translations[currentLang];
 
     if (title) title.textContent = texts.title;
     if (flexed) flexed.classList.toggle('hidden', !drank);
