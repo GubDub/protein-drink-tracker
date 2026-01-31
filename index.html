@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +10,26 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
 </head>
-<body>
-  <main class="app">
-    <h1 class="title">Protein Drink Tracker</h1>
 
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <h1 class="logo-text">Protein Tracker</h1>
+    </div>
+
+    <div class="header-center">
+      <div id="main-clock" class="navbar-clock" aria-label="Current Local Time"></div>
+      <div id="main-clock-label" class="navbar-location"></div>
+    </div>
+
+    <div class="header-right">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <div class="main-content">
     <p id="date-text" class="date-text" aria-live="polite"></p>
 
     <div class="graphic-container" aria-hidden="true">
@@ -20,14 +37,20 @@
       <img id="arm-weak" class="graphic-img" src="images/not-drank.png" alt="Protein not yet drank today" />
     </div>
 
-    <p id="status-text" class="status"></p>
-
-    <p id="streak-text" class="streak-text" aria-live="polite"></p>
+    <div class="status-area">
+      <p id="status-text" class="status"></p>
+      <p id="streak-text" class="streak-text" aria-live="polite"></p>
+    </div>
 
     <button type="button" id="toggle-btn" class="toggle-btn" aria-pressed="false">
       I drank my protein
     </button>
-  </main>
+
+    <div id="world-clocks" class="world-clocks footer-clocks" aria-label="World Times">
+      <!-- Populated by JS -->
+    </div>
+  </div>
   <script src="app.js"></script>
 </body>
+
 </html>

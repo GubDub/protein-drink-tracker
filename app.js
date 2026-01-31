@@ -2,8 +2,19 @@
   'use strict';
 
   const STORAGE_KEY = 'proteinDrinkTracker';
+  const THEME_KEY = 'proteinTheme';
   const RESET_HOUR = 2; // 2am local
   const HISTORY_MAX_DAYS = 365;
+
+  const WORLD_CITIES = [
+    { name: 'New York', timeZone: 'America/New_York' },
+    { name: 'London', timeZone: 'Europe/London' },
+    { name: 'Tokyo', timeZone: 'Asia/Tokyo' },
+    { name: 'Sydney', timeZone: 'Australia/Sydney' }
+  ];
+
+  /* --- Location Variables --- */
+  let userLocation = { city: 'Local Time', timeZone: undefined };
 
   /**
    * App "day" = from 2:00 AM to 1:59 AM next calendar day (local).
@@ -52,7 +63,7 @@
     try {
       const trimmed = (history || []).slice(-HISTORY_MAX_DAYS);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ dateKey, drank, history: trimmed }));
-    } catch (_) {}
+    } catch (_) { }
   }
 
   function getCurrentDrank() {
@@ -115,6 +126,101 @@
     return next;
   }
 
+  /* --- Location Functions --- */
+  async function fetchCityName(lat, lon) {
+    try {
+      // Using BigDataCloud's free reverse geocoding API (client-side capable)
+      const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+      const data = await res.json();
+      return data.city || data.locality || 'Location Found';
+    } catch (e) {
+      console.error('City fetch failed', e);
+      return 'Local Time';
+    }
+  }
+
+  function initLocation() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        userLocation.city = await fetchCityName(latitude, longitude);
+        // We can trust the browser's Intl timezone, but having the city name confirm's "My Location"
+        const el = document.getElementById('main-clock-label');
+        if (el) el.textContent = 'Time in ' + userLocation.city;
+      }, (err) => {
+        console.warn('Geolocation denied or failed', err);
+        const el = document.getElementById('main-clock-label');
+        if (el) el.textContent = 'Local Time';
+      });
+    } else {
+      const el = document.getElementById('main-clock-label');
+      if (el) el.textContent = 'Local Time';
+    }
+  }
+
+  /* --- Clock Functions --- */
+  function updateClock() {
+    const now = new Date();
+
+    // Main Clock (Local) - Modernized with Spans
+    const mainClock = document.getElementById('main-clock');
+    if (mainClock) {
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+
+      mainClock.innerHTML = `
+        <span class="clock-time">${h}:${m}</span><span class="clock-seconds">${s}</span>
+      `;
+    }
+
+    // World Clocks
+    const container = document.getElementById('world-clocks');
+    if (container) {
+      let html = '';
+      WORLD_CITIES.forEach(city => {
+        const timeStr = now.toLocaleTimeString('en-US', {
+          timeZone: city.timeZone,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+        html += `
+          <div class="world-clock-item">
+            <span class="city-name">${city.name}</span>
+            <span class="city-time">${timeStr}</span>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+  }
+
+  /* --- Theme Functions --- */
+  function loadTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      btn.textContent = theme === 'light' ? '☀️' : '🌙';
+      btn.setAttribute('aria-label', theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+    }
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  }
+
+  /* --- UI Functions --- */
   function updateUI(drank) {
     const dateKey = getDateKey();
     const flexed = document.getElementById('arm-flexed');
@@ -153,6 +259,7 @@
   }
 
   function init() {
+    // PROTEIN TRACKER INIT
     const drank = getCurrentDrank();
     updateUI(drank);
 
@@ -167,14 +274,26 @@
       });
     }
 
-    // Optional: re-check dateKey periodically while app is open (e.g. across midnight)
+    // THEME INIT
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', toggleTheme);
+    }
+    setTheme(loadTheme());
+
+    // CLOCK INIT
+    initLocation();
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Periodic Date Check
     setInterval(function () {
       const current = getCurrentDrank();
       updateUI(current);
     }, 60000);
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
+      navigator.serviceWorker.register('sw.js').catch(function () { });
     }
   }
 
