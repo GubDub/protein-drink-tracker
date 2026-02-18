@@ -105,4 +105,25 @@ const translations = {
             "Protein gücü! 🏋️‍♂️"
         ]
     },
+    ro: {
+        title: "Monitorizare Băuturi Proteice",
+        proteinFoodListBtn: "Listă alimente bogate în proteine (naturale)",
+        btnDrank: "Am băut proteina",
+        btnDrankUndo: "Anulează",
+        statusDone: "Proteina este bifată pentru azi.",
+        statusNotDone: "Încă nu pentru azi.",
+        statusStreak: "zile consecutive!",
+        localTime: "Ora locală",
+        lastDrankLabel: "Ultima dată băută la",
+        motivationalQuotes: [
+            "Rămâi puternic! 💪",
+            "Consecvența este cheia! 🔑",
+            "Câte o înghițitură pe rând! 🥤",
+            "Hrănește-ți corpul! ⚡",
+            "Te descurci excelent! 🌟",
+            "Hidratează-te și prosperă! 💧",
+            "Ține seria vie! 🔥",
+            "Puterea proteinelor! 🏋️‍♂️"
+        ]
+    }
   };
